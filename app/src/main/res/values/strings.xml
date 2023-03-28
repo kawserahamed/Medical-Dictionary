@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Medical Dictionary</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Home</string>
+    <string name="favourite">Favourite</string>
+    <string name="note">Note</string>
+    <string name="definition">Definition</string>
+    <string name="synonyms">Synonyms</string>
+    <string name="let_s_find_your_word">Let\'s find your word</string>
+    <string name="camera">camera</string>
+    <string name="audio">audio</string>
+</resources>
