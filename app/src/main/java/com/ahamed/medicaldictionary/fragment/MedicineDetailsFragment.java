@@ -95,6 +95,43 @@ public class MedicineDetailsFragment extends Fragment implements SynonymsWrdList
             binding.rvSynonyms.setLayoutManager(new LinearLayoutManager(getActivity()));
             binding.rvSynonyms.setAdapter(adapter);
         }
+
+        int currentId = Integer.parseInt(model.get_id());
+        int nextID = currentId + 1;
+        int previousID = currentId - 1;
+        if (currentId <= 1) {
+            binding.btnPrevious.setVisibility(View.GONE);
+        } else {
+            binding.btnPrevious.setVisibility(View.VISIBLE);
+
+        }
+        if (currentId >= 99054) {
+            binding.btnNext.setVisibility(View.GONE);
+        } else {
+            binding.btnNext.setVisibility(View.VISIBLE);
+
+        }
+        binding.btnNext.setOnClickListener(v -> {
+            MedicineModel medicineModel = viewModel.getNextWordByID("" + nextID);
+            if (medicineModel != null) {
+                model = medicineModel;
+                loadUI();
+            } else {
+                Toast.makeText(getActivity(), "Word not found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        binding.btnPrevious.setOnClickListener(v -> {
+            MedicineModel medicineModel = viewModel.getPreviousWordByID("" + previousID);
+            if (medicineModel != null) {
+                model = medicineModel;
+                loadUI();
+            } else {
+                Toast.makeText(getActivity(), "Word not found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     @Override

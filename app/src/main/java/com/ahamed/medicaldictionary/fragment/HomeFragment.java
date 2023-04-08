@@ -3,19 +3,27 @@ package com.ahamed.medicaldictionary.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ahamed.medicaldictionary.R;
 import com.ahamed.medicaldictionary.adapter.MedicineAdapter;
 import com.ahamed.medicaldictionary.databinding.FragmentHomeBinding;
 import com.ahamed.medicaldictionary.model.MedicineModel;
@@ -48,6 +56,10 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+        assert navHostFragment != null;
+        NavController navController = navHostFragment.getNavController();
+
         mProductList = new ArrayList<>();
         viewModel = new ViewModelProvider(requireActivity()).get(DatabaseViewModel.class);
         adapter = new MedicineAdapter(mProductList, i -> {
@@ -84,12 +96,57 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        viewModel.getAllMedicine(1, limit).observe(getViewLifecycleOwner(), productModels -> {
+        viewModel.getAllMedicineWithPage(1, limit).observe(getViewLifecycleOwner(), productModels -> {
             mProductList.clear();
             mProductList.addAll(productModels);
             adapter.notifyDataSetChanged();
             binding.rvMedicine.scrollToPosition(position);
+
         });
+
+        binding.searchWord.setOnItemClickListener((parent, view, position, id) -> {
+            String word = binding.searchWord.getText().toString();
+            MedicineModel medicineModel = viewModel.getWordByName(word);
+            if (medicineModel != null) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data_key", medicineModel);
+                Navigation.findNavController(requireView()).navigate(R.id.action_homeFragment_to_medicineDetailsFragment, bundle);
+
+
+            } else {
+                Toast.makeText(getActivity(), "Word not found", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        binding.searchWord.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.getAutoWordList(s.toString()).observe(getViewLifecycleOwner(), medicineModels -> {
+                    List<String> searchList = new ArrayList<>();
+                    for (MedicineModel model : medicineModels) {
+                        searchList.add(model.getWord());
+                    }
+                    ArrayAdapter<String> autoTextAdapter = new ArrayAdapter<>(getActivity(),
+                            android.R.layout.simple_spinner_dropdown_item, searchList);
+                    binding.searchWord.setAdapter(autoTextAdapter);
+
+                });
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         return binding.getRoot();
     }
 
@@ -98,7 +155,7 @@ public class HomeFragment extends Fragment {
         binding.progressBar.setVisibility(View.VISIBLE);
         new Handler().postDelayed(() -> {
             Log.d("TAG", "dataFetch: " + count);
-            viewModel.getAllMedicine(1, count).observe(lifecycleOwner, productModels -> {
+            viewModel.getAllMedicineWithPage(1, count).observe(lifecycleOwner, productModels -> {
                 mProductList.clear();
                 mProductList.addAll(productModels);
                 adapter.notifyDataSetChanged();
@@ -106,4 +163,6 @@ public class HomeFragment extends Fragment {
             });
         }, 1000);
     }
+
+
 }

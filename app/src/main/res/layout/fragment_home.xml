@@ -10,6 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         tools:context=".fragment.HomeFragment">
 
@@ -24,56 +26,22 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/purple_500" />
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:title="@string/app_name" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/search_word"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@color/purple_500">
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                android:drawableStart="@drawable/round_search_24"
+                android:drawablePadding="10dp"
+                android:hint="@string/search"
+                android:padding="10dp" />
 
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/search_bg"
-                    android:drawableStart="@drawable/round_search_24"
-                    android:drawablePadding="8dp"
-                    android:hint="@string/let_s_find_your_word"
-                    android:importantForAutofill="no"
-                    android:inputType="textWebEditText"
-                    android:padding="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="16dp"
-                    android:contentDescription="@string/camera"
-                    android:src="@drawable/round_photo_camera_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="@string/audio"
-                    android:src="@drawable/round_mic_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -86,8 +54,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            tools:listitem="@layout/layout_item_medicine" />
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
         <ProgressBar
             android:id="@+id/progressBar"

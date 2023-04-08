@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.ahamed.medicaldictionary.R;
 import com.ahamed.medicaldictionary.database.DatabaseHelper;
 import com.ahamed.medicaldictionary.model.MedicineModel;
 
@@ -37,9 +38,17 @@ public class DatabaseViewModel extends AndroidViewModel {
         }
     }
 
-    public MutableLiveData<List<MedicineModel>> getAllMedicine(int currentPage, int limit) {
+    public MutableLiveData<List<MedicineModel>> getAllMedicineWithPage(int currentPage, int limit) {
         MutableLiveData<List<MedicineModel>> listMutableLiveData = new MutableLiveData<>();
         List<MedicineModel> tempList = databaseHelper.getAllMedicine(currentPage, limit);
+        listMutableLiveData.postValue(tempList);
+        databaseHelper.close();
+        return listMutableLiveData;
+    }
+
+    public MutableLiveData<List<MedicineModel>> getAutoWordList(String word) {
+        MutableLiveData<List<MedicineModel>> listMutableLiveData = new MutableLiveData<>();
+        List<MedicineModel> tempList = databaseHelper.getAutoWordList(word);
         listMutableLiveData.postValue(tempList);
         databaseHelper.close();
         return listMutableLiveData;
@@ -51,9 +60,21 @@ public class DatabaseViewModel extends AndroidViewModel {
         return word;
     }
 
+    public MedicineModel getNextWordByID(String id) {
+        MedicineModel word;
+        word = databaseHelper.getNextWordByID(id);
+        return word;
+    }
+
+    public MedicineModel getPreviousWordByID(String id) {
+        MedicineModel word;
+        word = databaseHelper.getPreviousWordByID(id);
+        return word;
+    }
+
     private boolean copyDatabase(Context context) {
         try {
-            InputStream inputStream = context.getAssets().open(DatabaseHelper.DB_NAME);
+            InputStream inputStream = context.getResources().openRawResource(R.raw.word);
             String outFileName = DatabaseHelper.DB_PATH + DatabaseHelper.DB_NAME;
             OutputStream outputStream = new FileOutputStream(outFileName);
             byte[] buff = new byte[1024];
