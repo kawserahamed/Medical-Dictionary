@@ -42,12 +42,7 @@ public class SynonymsAdapter extends RecyclerView.Adapter<SynonymsAdapter.Synony
         } else {
             holder.title.setText(cStr);
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.synonymsWord(cStr);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> listener.synonymsWord(cStr));
     }
 
     @Override

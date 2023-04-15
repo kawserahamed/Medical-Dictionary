@@ -13,4 +13,6 @@
     <string name="search">Search</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
+    <string name="copy">Copy</string>
+    <string name="reading_name">Reading name</string>
 </resources>
