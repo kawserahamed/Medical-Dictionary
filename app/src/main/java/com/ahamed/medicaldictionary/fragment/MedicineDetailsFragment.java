@@ -5,6 +5,7 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.ahamed.medicaldictionary.databinding.FragmentMedicineDetailsBinding;
 import com.ahamed.medicaldictionary.model.MedicineModel;
 import com.ahamed.medicaldictionary.utils.MyHelper;
 import com.ahamed.medicaldictionary.viewModel.DatabaseViewModel;
+import com.ahamed.medicaldictionary.viewModel.MedicalViewModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,9 +34,9 @@ import java.util.Locale;
 public class MedicineDetailsFragment extends Fragment {
 
 
-    private static MedicineModel model;
     private FragmentMedicineDetailsBinding binding;
     private DatabaseViewModel viewModel;
+    private MedicalViewModel medicalViewModel;
     private static final String TAG = "TAG";
     private ClipData myClip;
     private SynonymsAdapter adapter;
@@ -57,21 +59,30 @@ public class MedicineDetailsFragment extends Fragment {
             }
         });
         myClipboard = (ClipboardManager) requireActivity().getSystemService(CLIPBOARD_SERVICE);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(DatabaseViewModel.class);
+        medicalViewModel = new ViewModelProvider(requireActivity()).get(MedicalViewModel.class);
         Bundle bundle = getArguments();
         assert bundle != null;
-        model = (MedicineModel) bundle.getSerializable("data_key");
-        loadUI();
-        viewModel = new ViewModelProvider(requireActivity()).get(DatabaseViewModel.class);
+        MedicineModel model = (MedicineModel) bundle.getSerializable("data_key");
+        medicalViewModel.setLiveData(model);
+
+        medicalViewModel.getLiveData().observe(getViewLifecycleOwner(), rawWord -> {
+            loadUI(rawWord);
+            Log.d(TAG, "onChanged: " + rawWord);
+        });
+
+
         binding.btnBack.setOnClickListener(v -> Navigation.findNavController(requireView()).popBackStack());
 
         return binding.getRoot();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void loadUI() {
+    private void loadUI(MedicineModel model) {
         String title = model.getWord();
         String fTitle = title.substring(0, 1).toUpperCase() + title.substring(1);
-        binding.tvTitle.setText(fTitle);
+        binding.tvTitle.setText(MyHelper.getToUpperCase(model.getWord()));
 
         binding.btnCopy.setOnClickListener(v -> {
             myClip = ClipData.newPlainText("text", fTitle);
@@ -82,25 +93,21 @@ public class MedicineDetailsFragment extends Fragment {
 
 
         List<String> word_list = Arrays.asList(model.getMeanings().split(":"));
-        String definition = word_list.get(2);
+        String rawDefinition = word_list.get(2);
 
 
-       /* String nDefinition = definition.trim().replace("[", "");
-        String mDefinition = nDefinition.replace("\"s\"", "");
-        String oDefinition = mDefinition.replace("\"", "");
-        String fDefinition = oDefinition.replace("],", "");*/
-
-        //  String str = fDefinition.substring(0, 1).toUpperCase() + fDefinition.substring(1);
+        String definition = MyHelper.cleanText(rawDefinition);
         binding.tvDefinition.setText(MyHelper.cleanText(definition));
 
 
-    /*    if (TextUtils.isEmpty(fDefinition)) {
-            binding.tvDefinitionTitle.setVisibility(View.GONE);
-            binding.tvDefinition.setVisibility(View.GONE);
+        if (MyHelper.cleanText(definition).isEmpty()) {
+            String sorry = "SORRY, Definition not found";
+            binding.tvDefinition.setText(sorry);
+            binding.tvDefinition.setTextColor(Color.parseColor("#FFE53935"));
         } else {
-            String str = fDefinition.substring(0, 1).toUpperCase() + fDefinition.substring(1);
-            binding.tvDefinition.setText(str);
-        }*/
+            binding.tvDefinition.setTextColor(Color.parseColor("#000000"));
+            binding.tvDefinition.setText(MyHelper.getToUpperCase(definition));
+        }
 
         String synonyms = word_list.get(3);
         List<String> synonymsList = Arrays.asList(synonyms.split(","));
@@ -111,19 +118,14 @@ public class MedicineDetailsFragment extends Fragment {
             adapter = new SynonymsAdapter(synonymsList, word -> {
                 MedicineModel medicineModel = viewModel.getWordByName(word);
                 if (medicineModel != null) {
-                    model = medicineModel;
-                    loadUI();
+                    medicalViewModel.setLiveData(medicineModel);
                     adapter.notifyDataSetChanged();
-
                 } else {
                     Toast.makeText(getActivity(), "Word not found", Toast.LENGTH_SHORT).show();
                 }
             });
             binding.rvSynonyms.setLayoutManager(new LinearLayoutManager(getActivity()));
             binding.rvSynonyms.setAdapter(adapter);
-
-        } else {
-            binding.tvSynonyms.setVisibility(View.GONE);
         }
 
 
@@ -145,8 +147,7 @@ public class MedicineDetailsFragment extends Fragment {
         binding.btnNext.setOnClickListener(v -> {
             MedicineModel medicineModel = viewModel.getNextWordByID("" + nextID);
             if (medicineModel != null) {
-                model = medicineModel;
-                loadUI();
+                medicalViewModel.setLiveData(medicineModel);
                 adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(getActivity(), "Word not found", Toast.LENGTH_SHORT).show();
@@ -156,8 +157,7 @@ public class MedicineDetailsFragment extends Fragment {
         binding.btnPrevious.setOnClickListener(v -> {
             MedicineModel medicineModel = viewModel.getPreviousWordByID("" + previousID);
             if (medicineModel != null) {
-                model = medicineModel;
-                loadUI();
+                medicalViewModel.setLiveData(medicineModel);
                 adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(getActivity(), "Word not found", Toast.LENGTH_SHORT).show();

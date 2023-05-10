@@ -15,4 +15,6 @@
     <string name="next">Next</string>
     <string name="copy">Copy</string>
     <string name="reading_name">Reading name</string>
+    <string name="history">History</string>
+    <string name="bookmark">Bookmark</string>
 </resources>
