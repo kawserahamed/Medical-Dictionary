@@ -1,4 +1,4 @@
-package com.ahamed.medicaldictionary.fragment;
+package com.ahamed.medicaldictionary.ui;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 

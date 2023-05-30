@@ -7,16 +7,28 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.ahamed.medicaldictionary.fragment.HomeFragment"
+        android:name="com.ahamed.medicaldictionary.ui.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_medicineDetailsFragment"
             app:destination="@id/medicineDetailsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
     <fragment
         android:id="@+id/medicineDetailsFragment"
-        android:name="com.ahamed.medicaldictionary.fragment.MedicineDetailsFragment"
+        android:name="com.ahamed.medicaldictionary.ui.MedicineDetailsFragment"
         android:label="fragment_medicine_details"
         tools:layout="@layout/fragment_medicine_details" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.ahamed.medicaldictionary.ui.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_historyFragment_to_medicineDetailsFragment"
+            app:destination="@id/medicineDetailsFragment" />
+    </fragment>
 </navigation>

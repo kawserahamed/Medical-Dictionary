@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/lite_white"
-        tools:context=".fragment.MedicineDetailsFragment">
+        tools:context=".ui.MedicineDetailsFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -30,7 +30,9 @@
                     android:id="@+id/btn_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
                     android:contentDescription="@string/app_name"
+                    android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="10dp"
                     android:src="@drawable/round_arrow_back_ios_24"
@@ -41,7 +43,7 @@
 
                 <TextView
                     android:id="@+id/toolbar_name"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:text="@string/app_name"
@@ -49,7 +51,6 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_back"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -107,9 +108,8 @@
                             android:contentDescription="@string/copy"
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingHorizontal="8dp"
                             android:paddingVertical="10dp"
-                            android:paddingStart="5dp"
-                            android:paddingEnd="5dp"
                             android:src="@drawable/baseline_content_copy_24" />
 
                         <ImageView
@@ -120,9 +120,8 @@
                             android:contentDescription="@string/reading_name"
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingHorizontal="8dp"
                             android:paddingVertical="10dp"
-                            android:paddingStart="5dp"
-                            android:paddingEnd="10dp"
                             android:src="@drawable/round_volume_up_24" />
 
                     </LinearLayout>
@@ -174,6 +173,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="5dp"
+                        android:padding="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_synonyms" />
@@ -215,7 +215,8 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:drawableStartCompat="@drawable/round_arrow_back_ios_24" />
+                    app:drawableStartCompat="@drawable/round_arrow_back_ios_24"
+                    app:drawableTint="@color/black" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -240,7 +241,8 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:drawableEndCompat="@drawable/round_arrow_forward_ios_24" />
+                    app:drawableEndCompat="@drawable/round_arrow_forward_ios_24"
+                    app:drawableTint="@color/black" />
 
             </com.google.android.material.card.MaterialCardView>
 

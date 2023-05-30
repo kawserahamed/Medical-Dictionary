@@ -23,6 +23,7 @@ public class DatabaseViewModel extends AndroidViewModel {
     private static final String TAG = "TAG";
     private final DatabaseHelper databaseHelper;
 
+
     public DatabaseViewModel(@NonNull Application application) {
         super(application);
         this.application = application;

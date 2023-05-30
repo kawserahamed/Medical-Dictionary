@@ -39,4 +39,13 @@ public class MedicineModel implements Serializable {
     public void set_id(String _id) {
         this._id = _id;
     }
+
+    @Override
+    public String toString() {
+        return "MedicineModel{" +
+                "word='" + word + '\'' +
+                ", meanings='" + meanings + '\'' +
+                ", _id='" + _id + '\'' +
+                '}';
+    }
 }

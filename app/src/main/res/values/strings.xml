@@ -17,4 +17,5 @@
     <string name="reading_name">Reading name</string>
     <string name="history">History</string>
     <string name="bookmark">Bookmark</string>
+    <string name="clear_all">Clear All</string>
 </resources>

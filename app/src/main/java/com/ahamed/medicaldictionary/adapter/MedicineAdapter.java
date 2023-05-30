@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ahamed.medicaldictionary.R;
 import com.ahamed.medicaldictionary.listener.MedicinePositionListener;
 import com.ahamed.medicaldictionary.model.MedicineModel;
+import com.ahamed.medicaldictionary.utils.MyHelper;
 
 import java.util.List;
 
@@ -35,15 +36,10 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, int position) {
         MedicineModel model = list.get(position);
-        String title = model.getWord();
-        String fTitle = title.substring(0, 1).toUpperCase() + title.substring(1);
-        String str = model.get_id() + " \t" + fTitle;
-        holder.textView.setText(str);
+        holder.textView.setText(MyHelper.getToUpperCase(model.getWord()));
         holder.itemView.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("data_key", model);
-            Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_medicineDetailsFragment, bundle);
             listener.medicinePosition(position);
+            listener.wordClick(model);
         });
     }
 

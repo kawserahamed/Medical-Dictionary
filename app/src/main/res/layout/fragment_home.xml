@@ -13,7 +13,7 @@
         android:focusable="false"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
-        tools:context=".fragment.HomeFragment">
+        tools:context=".ui.HomeFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
