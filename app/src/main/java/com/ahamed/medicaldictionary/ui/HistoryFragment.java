@@ -55,7 +55,7 @@ public class HistoryFragment extends Fragment {
         binding.rvHistory.setAdapter(adapter);
 
 
-        historyViewModel.getAllHistory().observe(getViewLifecycleOwner(), historyModels -> {
+        historyViewModel.getAllHistoryByDesc().observe(getViewLifecycleOwner(), historyModels -> {
             list.clear();
             list.addAll(historyModels);
             adapter.notifyDataSetChanged();
