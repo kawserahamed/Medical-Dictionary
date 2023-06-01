@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <EditText
+            android:id="@+id/tv_note"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/card_background"
+            android:backgroundTint="#F3EFEF"
+            android:gravity="start"
+            android:hint="@string/type_note"
+            android:importantForAutofill="yes|yesExcludeDescendants"
+            android:inputType="textWebEditText"
+            android:padding="8dp"
+            tools:ignore="Autofill" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="@string/cancel"
+                app:backgroundTint="#E53935" />
+
+            <Button
+                android:id="@+id/btn_okay"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:text="@string/okay" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

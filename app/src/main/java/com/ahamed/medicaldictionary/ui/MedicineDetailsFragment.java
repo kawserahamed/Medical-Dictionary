@@ -3,6 +3,7 @@ package com.ahamed.medicaldictionary.ui;
 import static android.content.Context.CLIPBOARD_SERVICE;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.graphics.Color;
@@ -14,15 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.ahamed.medicaldictionary.R;
 import com.ahamed.medicaldictionary.adapter.SynonymsAdapter;
+import com.ahamed.medicaldictionary.databinding.DialogNoteBinding;
 import com.ahamed.medicaldictionary.databinding.FragmentMedicineDetailsBinding;
+import com.ahamed.medicaldictionary.model.BookmarkModel;
 import com.ahamed.medicaldictionary.model.MedicineModel;
 import com.ahamed.medicaldictionary.utils.MyHelper;
+import com.ahamed.medicaldictionary.viewModel.BookmarkViewModel;
 import com.ahamed.medicaldictionary.viewModel.DatabaseViewModel;
 import com.ahamed.medicaldictionary.viewModel.MedicalViewModel;
 
@@ -33,10 +40,11 @@ import java.util.Locale;
 
 public class MedicineDetailsFragment extends Fragment {
 
-
+    private AlertDialog noteDialog;
     private FragmentMedicineDetailsBinding binding;
     private DatabaseViewModel viewModel;
     private MedicalViewModel medicalViewModel;
+    private BookmarkViewModel bookmarkViewModel;
     private static final String TAG = "TAG";
     private ClipData myClip;
     private SynonymsAdapter adapter;
@@ -50,21 +58,31 @@ public class MedicineDetailsFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this
         binding = FragmentMedicineDetailsBinding.inflate(inflater);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        DialogNoteBinding noteBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_note, null, false);
+        builder.setView(noteBinding.getRoot());
+        noteDialog = builder.create();
+
         textToSpeech = new TextToSpeech(getActivity(), status -> {
             if (status != TextToSpeech.ERROR) {
                 textToSpeech.setLanguage(Locale.ENGLISH);
             }
         });
+
         myClipboard = (ClipboardManager) requireActivity().getSystemService(CLIPBOARD_SERVICE);
 
         viewModel = new ViewModelProvider(requireActivity()).get(DatabaseViewModel.class);
         medicalViewModel = new ViewModelProvider(requireActivity()).get(MedicalViewModel.class);
+        bookmarkViewModel = new ViewModelProvider(requireActivity()).get(BookmarkViewModel.class);
         Bundle bundle = getArguments();
         assert bundle != null;
         MedicineModel model = (MedicineModel) bundle.getSerializable("data_key");
+        String home = bundle.getString("home_key");
+        String bookmarkKey = bundle.getString("bookmark_key");
+        String note = bundle.getString("note_key");
         medicalViewModel.setLiveData(model);
 
         medicalViewModel.getLiveData().observe(getViewLifecycleOwner(), rawWord -> {
@@ -72,6 +90,39 @@ public class MedicineDetailsFragment extends Fragment {
             Log.d(TAG, "onChanged: " + rawWord);
         });
 
+        if (home == null) {
+            binding.layoutBtn.setVisibility(View.GONE);
+        } else {
+            binding.layoutBtn.setVisibility(View.VISIBLE);
+        }
+        if (bookmarkKey == null) {
+            binding.btnBookmark.setVisibility(View.GONE);
+        } else {
+            binding.btnBookmark.setVisibility(View.VISIBLE);
+        }
+
+        if (note == null) {
+            binding.tvNote.setVisibility(View.GONE);
+        } else {
+            if (note.trim().equals("")){
+                binding.tvNote.setVisibility(View.GONE);
+            }else {
+                MyHelper.setBoldNormalText("Your note: ", note.trim(), binding.tvNote);
+                binding.tvNote.setVisibility(View.VISIBLE);
+            }
+
+        }
+
+        binding.btnBookmark.setOnClickListener(v -> noteDialog.show());
+        noteBinding.btnOkay.setOnClickListener(v -> {
+            String strNote = noteBinding.tvNote.getEditableText().toString();
+            BookmarkModel bookmarkModel = new BookmarkModel(model.getWord(), model.getMeanings(), model.get_id(), strNote, MyHelper.getDate());
+            bookmarkViewModel.addBM(bookmarkModel);
+            Navigation.findNavController(requireView()).navigate(R.id.action_medicineDetailsFragment_to_bookmarkFragment);
+            noteDialog.dismiss();
+        });
+
+        noteBinding.btnCancel.setOnClickListener(v -> noteDialog.dismiss());
 
         binding.btnBack.setOnClickListener(v -> Navigation.findNavController(requireView()).popBackStack());
 

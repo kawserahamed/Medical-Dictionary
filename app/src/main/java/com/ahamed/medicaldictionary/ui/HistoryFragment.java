@@ -49,7 +49,8 @@ public class HistoryFragment extends Fragment {
             medicineModel.set_id(model.get_id());
             Bundle bundle = new Bundle();
             bundle.putSerializable("data_key", medicineModel);
-            Navigation.findNavController(requireView()).navigate(R.id.action_historyFragment_to_medicineDetailsFragment, bundle);
+            bundle.putString("bookmark_key", "bookmark");
+            Navigation.findNavController(container).navigate(R.id.action_historyFragment_to_medicineDetailsFragment, bundle);
 
         });
         binding.rvHistory.setAdapter(adapter);

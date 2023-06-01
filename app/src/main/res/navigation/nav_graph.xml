@@ -16,12 +16,19 @@
         <action
             android:id="@+id/action_homeFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_bookmarkFragment"
+            app:destination="@id/bookmarkFragment" />
     </fragment>
     <fragment
         android:id="@+id/medicineDetailsFragment"
         android:name="com.ahamed.medicaldictionary.ui.MedicineDetailsFragment"
         android:label="fragment_medicine_details"
-        tools:layout="@layout/fragment_medicine_details" />
+        tools:layout="@layout/fragment_medicine_details" >
+        <action
+            android:id="@+id/action_medicineDetailsFragment_to_bookmarkFragment"
+            app:destination="@id/bookmarkFragment" />
+    </fragment>
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.ahamed.medicaldictionary.ui.HistoryFragment"
@@ -29,6 +36,15 @@
         tools:layout="@layout/fragment_history" >
         <action
             android:id="@+id/action_historyFragment_to_medicineDetailsFragment"
+            app:destination="@id/medicineDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="com.ahamed.medicaldictionary.ui.BookmarkFragment"
+        android:label="fragment_bookmark"
+        tools:layout="@layout/fragment_bookmark" >
+        <action
+            android:id="@+id/action_bookmarkFragment_to_medicineDetailsFragment"
             app:destination="@id/medicineDetailsFragment" />
     </fragment>
 </navigation>

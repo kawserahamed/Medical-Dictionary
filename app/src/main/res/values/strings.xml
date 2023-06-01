@@ -18,4 +18,10 @@
     <string name="history">History</string>
     <string name="bookmark">Bookmark</string>
     <string name="clear_all">Clear All</string>
+    <string name="about">About</string>
+    <string name="favorite">Favorite</string>
+    <string name="delete">delete</string>
+    <string name="type_note">Type note…</string>
+    <string name="cancel">Cancel</string>
+    <string name="okay">Okay</string>
 </resources>

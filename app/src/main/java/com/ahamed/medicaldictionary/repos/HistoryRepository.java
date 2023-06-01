@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 
 import com.ahamed.medicaldictionary.daos.HistoryDao;
-import com.ahamed.medicaldictionary.database.HistoryDatabase;
+import com.ahamed.medicaldictionary.database.LocalRoomDatabase;
 import com.ahamed.medicaldictionary.model.HistoryModel;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class HistoryRepository {
     private final HistoryDao historyDao;
     public HistoryRepository(Context context) {
 
-        historyDao = HistoryDatabase.getDatabase(context).getHistoryDao();
+        historyDao = LocalRoomDatabase.getDatabase(context).getHistoryDao();
     }
     public void addHistory(HistoryModel historyModel) {
         historyDao.insertHistory(historyModel);

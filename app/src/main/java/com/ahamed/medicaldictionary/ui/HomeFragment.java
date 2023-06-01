@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
@@ -112,7 +112,7 @@ public class HomeFragment extends Fragment {
                         Navigation.findNavController(requireView()).navigate(R.id.action_homeFragment_to_historyFragment);
                         break;
                     case R.id.menu_bookmark:
-                        Toast.makeText(getActivity(), "bookmark", Toast.LENGTH_SHORT).show();
+                       Navigation.findNavController(requireView()).navigate(R.id.action_homeFragment_to_bookmarkFragment);
                         break;
                 }
 
@@ -138,6 +138,8 @@ public class HomeFragment extends Fragment {
             public void wordClick(MedicineModel model) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("data_key", model);
+                bundle.putString("home_key", "home");
+                bundle.putString("bookmark_key", "bookmark");
                 Navigation.findNavController(requireView()).navigate(R.id.action_homeFragment_to_medicineDetailsFragment, bundle);
                 HistoryModel historyModel = new HistoryModel(model.getWord(), model.getMeanings(), model.get_id(), MyHelper.getDate());
                 historyViewModel.addHistory(historyModel);
@@ -186,6 +188,8 @@ public class HomeFragment extends Fragment {
             if (medicineModel != null) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("data_key", medicineModel);
+                bundle.putString("home_key", "home");
+                bundle.putString("bookmark_key", "bookmark");
                 Navigation.findNavController(requireView()).navigate(R.id.action_homeFragment_to_medicineDetailsFragment, bundle);
                 HistoryModel historyModel = new HistoryModel(medicineModel.getWord(), medicineModel.getMeanings(), medicineModel.get_id(), MyHelper.getDate());
                 historyViewModel.addHistory(historyModel);

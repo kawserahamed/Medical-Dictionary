@@ -6,17 +6,20 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.ahamed.medicaldictionary.daos.BookmarkDao;
 import com.ahamed.medicaldictionary.daos.HistoryDao;
+import com.ahamed.medicaldictionary.model.BookmarkModel;
 import com.ahamed.medicaldictionary.model.HistoryModel;
 
-@Database(entities = {HistoryModel.class}, version = 1)
-public abstract class HistoryDatabase extends RoomDatabase {
+@Database(entities = {HistoryModel.class, BookmarkModel.class}, version = 1)
+public abstract class LocalRoomDatabase extends RoomDatabase {
     public abstract HistoryDao getHistoryDao();
-    private static HistoryDatabase database;
+    public abstract BookmarkDao getBookmarkDao();
+    private static LocalRoomDatabase database;
 
-    public static HistoryDatabase getDatabase(Context context) {
+    public static LocalRoomDatabase getDatabase(Context context) {
         if (database == null) {
-            database = Room.databaseBuilder(context, HistoryDatabase.class, "history_db")
+            database = Room.databaseBuilder(context, LocalRoomDatabase.class, "history_db")
                     .allowMainThreadQueries()
                     .build();
             return database;
